@@ -1,13 +1,3 @@
-# riscv-gatesim
-
-This is project was created for the **Course:** EE/CE 6325 VLSI Design. We chose to simulate a simple RISC V CPU with 6 instructions for simplicity.
-
-## Contributors
-
-- Areeb Iqbal
-- Jonathan Le
-
-
 # Standard Cell Library — 68nm CMOS
 
 A custom standard cell library designed and verified as part of EE/CE 6325 VLSI Design at UT Dallas. All cells were designed in Cadence Virtuoso, simulated with HSPICE, and verified with DRC and LVS using Calibre.
@@ -34,6 +24,7 @@ A custom standard cell library designed and verified as part of EE/CE 6325 VLSI 
 3. Functional simulation — HSPICE
 4. Abstract view generation — Cadence Virtuoso
 5. DRC and LVS verification — Calibre
+6. Timing characterization — PrimeLib
 
 ---
 
@@ -71,9 +62,9 @@ Simple CMOS inverter with one pMOS pull-up and one nMOS pull-down.
 ---
 
 ### XOR2
-**Boolean:** `A⊕B`
+**Boolean:** `((A+B)'+(A.B))'`
 
-Implemented with 10 transistors.
+Implemented using an efficient 10-transistor design to minimize area and transistor count compared to a standard gate-level implementation.
 
 | Measurement | Value |
 |---|---|
@@ -85,9 +76,9 @@ Implemented with 10 transistors.
 ---
 
 ### XNOR2
-**Boolean:** `(A⊕B)'`
+**Boolean:** `((A.B)'.(A+B))'`
 
-Complement of XOR2, also implemented with 10 transistors.
+Implemented using an efficient 10-transistor design, mirroring the XOR2 topology with an inverted output stage.
 
 | Measurement | Value |
 |---|---|
@@ -180,9 +171,39 @@ Simplified: `A'B'C' + D'E' + F'`
 
 ---
 
+### DFF (D Flip-Flop)
+**Type:** Rising edge triggered with active-high synchronous reset
+
+Built from tri-state inverters. Layout was optimized by flipping cells to share VDD/GND rails, minimizing diffusion breaks to 4. Four M2 layers were used for input/output pins. Clock routing used a centered horizontal poly to minimize wire length.
+
+| Measurement | Value |
+|---|---|
+| Channel Length | 68 nm |
+| Cell Width | 7.063 µm |
+| Cell Height | 7.246 µm |
+| Pin Pitch | 0.26x multiple |
+| Diffusion Breaks | 4 |
+| M2 Layers | 4 |
+
+**Timing Characterization (HSPICE):**
+
+| Parameter | Q → HIGH | Q → LOW |
+|---|---|---|
+| Tsu_dd | 40.2 ps | 42.2 ps |
+| Tsu_opt | 40.5 ps | 42.5 ps |
+| Thold | 42.5 ps | 40.5 ps |
+| Tclk→Q | 315 ps | 280 ps |
+| TD | 355.5 ps | 322.5 ps |
+
+> **Note:** CLK rising edge reference point is at 3000 ps. Tsu_dd is defined as the smallest decimal setup time that still reliably drives Q to the correct output. TD = Tclk→Q + Tsu_opt.
+
+Timing characterization was completed using PrimeLib for timing, power, and noise analysis.
+
+---
+
 ## Combined Layout
 
-All 11 cells were placed into a single combined layout. Cell arrangement from left to right:
+All 11 combinational cells were placed into a single combined layout. Cell arrangement from left to right:
 
 `INV` → `NOR2` → `XOR2` → `XNOR2` → `OAI12` → `AOI21` → `NAND2` → `OAI22` → `AOI22` → `AOI123` → `OAI321`
 
@@ -190,3 +211,10 @@ DRC and LVS were run on the combined layout with clean results — no DRC errors
 
 ---
 
+## Contributors
+
+- Areeb Iqbal
+- Jonathan Le
+
+**Advisor:** Dr. Carl Sechen  
+**Course:** EE/CE 6325 VLSI Design — UT Dallas
