@@ -1,0 +1,20 @@
+\o Program:		@(#)$CDS: libManager version 6.1.8 - CAT37 09/08/2022 08:39 (sjfdcl1034) $
+\o Sub version:		sub-version  s284 
+\o Arguments:		-unmapped -mpssession virtuoso3524111 -mpshost engnx04a.utdallas.edu 
+\o Working Directory:	engnx04a.utdallas.edu:/home/eng/a/axi200007/cad/gf65/nor2/nor
+\o 64-bit offsets
+\o Qt version: 		5.9.1
+\o changeWorkingDir("/home/eng/a/axi200007/cad/gf65/nor2/nor") unnecessary.
+\o ddSetForcedLib("") unnecessary.
+\o Log file is "/home/eng/a/axi200007/cad/gf65/nor2/nor/libManager.log".
+\o Opening libManager window.
+\a nrSetWindowVisibility(cdsLibManager "show")
+\o MPS service: map window
+\o Library Manager customization server connected.
+\a nrSetCurrentWindow(cdsLibManager)
+\a nrResizeWindow(cdsLibManager list(348 419 1152 598))
+\a nrSetWindowVisibility(cdsLibManager "hide")
+\a _lmgrCloseIconify("cdsLibManager" 1)
+\o MPS service: shutdown
+\o libManager is exiting.
+\a exit(0)
